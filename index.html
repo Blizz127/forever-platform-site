@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forever Platform — Pure-Rust Vulkan RT MMO Preservation Engine</title>
+  <meta
+    name="description"
+    content="Live progress dashboard, RTX 5070 Ti ray-tracing benchmarks, and interactive F1 Classic vs. Enhanced showcase for Forever Platform: Earth &amp; Beyond, PlanetSide 1, Warhammer Online, and Marvel Heroes."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">FP</span>
+        <span>Forever Platform</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary sections">
+        <a href="#compare">F1 Live Swap</a>
+        <a href="#benchmarks">RTX Benchmarks</a>
+        <a href="#games">Game Dossiers</a>
+        <a href="#subsystems">Engine Matrix</a>
+        <a href="#timeline">Devlog</a>
+        <a href="#gallery">Captures</a>
+      </nav>
+
+      <button
+        id="f1-toggle"
+        class="f1-switch"
+        type="button"
+        aria-pressed="false"
+        title="Press F1 on your keyboard or click to swap Classic vs Enhanced"
+      >
+        <span class="keycap">F1</span>
+        <span class="mode-dot" aria-hidden="true"></span>
+        <span id="f1-label">ENHANCED + RT</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section id="top" class="hero">
+      <div class="container">
+        <div class="hero-top">
+          <div>
+            <div class="eyebrow">Hobby MMO Preservation Engine · V6 Live / V7 In Flight</div>
+            <h1>Four classic MMOs. One 31&nbsp;MB Rust + Vulkan RT engine.</h1>
+            <p class="hero-lead">
+              Preserving <strong>PlanetSide 1</strong>, <strong>Earth &amp; Beyond</strong>,
+              <strong>Warhammer Online</strong>, and <strong>Marvel Heroes</strong> out of a single
+              pure-Rust binary with hardware ray tracing, sculpted 2026 <code>.glb</code> asset packs,
+              smart AI fireteams, and Diablo II: Resurrected-style instant <strong>F1</strong> Classic ↔ Enhanced swapping.
+            </p>
+          </div>
+
+          <aside class="spec-panel" aria-label="Live engine telemetry summary">
+            <div class="spec-row">
+              <span class="spec-label">BUILD</span>
+              <span class="spec-val spec-val-highlight" id="meta-version">V6 Unified</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">BINARY</span>
+              <span class="spec-val" id="meta-binary">31 MB (sha 1b3c7e05)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">RENDERER</span>
+              <span class="spec-val">wgpu 30.0.1 · Vulkan Ray Query</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">TEST GPU</span>
+              <span class="spec-val">RTX 5070 Ti Laptop (12 GB)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">ASSET PACKS</span>
+              <span class="spec-val">305 .glb Models · 790+ PBR Maps</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">LAST VERIFIED</span>
+              <span class="spec-val" id="meta-updated">November 24, 2026</span>
+            </div>
+          </aside>
+        </div>
+
+        <div id="compare" class="stage-card" aria-label="Interactive Classic versus Enhanced comparison">
+          <div class="stage-toolbar">
+            <div id="compare-tabs" class="stage-tabs" role="tablist" aria-label="Choose game comparison scene"></div>
+            <div class="stage-hint">Drag handle or press <strong>F1</strong> to toggle full Classic / Enhanced</div>
+          </div>
+
+          <div id="compare-viewport" class="compare-viewport" style="--split: 50%">
+            <img id="compare-enhanced" class="compare-img" src="" alt="" />
+            <div class="compare-classic-wrap">
+              <img id="compare-classic" class="compare-img" src="" alt="" />
+            </div>
+            <span class="compare-badge compare-badge-left">Classic (Original Retail)</span>
+            <span class="compare-badge compare-badge-right">Enhanced + RTX RT</span>
+            <div class="compare-divider" aria-hidden="true">
+              <div class="compare-knob">&lt;|&gt;</div>
+            </div>
+            <label class="sr-only" for="compare-slider">Classic versus Enhanced reveal percentage</label>
+            <input
+              id="compare-slider"
+              class="compare-range"
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              aria-label="Compare Classic and Enhanced percentage"
+            />
+          </div>
+
+          <div class="stage-footer">
+            <div>
+              <h2 id="compare-title" class="stage-title">Loading scene...</h2>
+              <p id="compare-desc" class="stage-desc"></p>
+            </div>
+            <div id="compare-stats" class="stat-chips"></div>
+          </div>
+        </div>
+
+        <div id="v7-swarm-strip" class="swarm-strip" aria-label="Active V7 build lanes"></div>
+      </div>
+    </section>
+
+    <section id="benchmarks" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Live RTX 5070 Ti Telemetry</h2>
+            <p class="section-sub">
+              Steady-state <code>1600×900</code> Enhanced + Hardware Ray Tracing frame times measured directly
+              from Forever Platform's <code>--frame-log</code> profiler — zero skipped RT meshes across every scene.
+            </p>
+          </div>
+        </div>
+        <div id="bench-grid" class="bench-grid"></div>
+      </div>
+    </section>
+
+    <section id="games" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Preservation Dossiers</h2>
+            <p class="section-sub">
+              Four active MMOs running out of the same binary today, plus Tabula Rasa queued up as Game #5 once V7 lands.
+            </p>
+          </div>
+        </div>
+        <div id="games-grid" class="games-grid"></div>
+      </div>
+    </section>
+
+    <section id="subsystems" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Engine Subsystem Matrix</h2>
+            <p class="section-sub">
+              Honest breakdown of what is already rock-solid versus what's building in V7 or planned next.
+            </p>
+          </div>
+          <div id="subsystem-filters" class="filter-pills" role="group" aria-label="Filter subsystems by category"></div>
+        </div>
+        <div id="subsystem-grid" class="subsystem-grid"></div>
+      </div>
+    </section>
+
+    <section id="timeline" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Build Timeline</h2>
+            <p class="section-sub">
+              From four separate Rust prototypes to a unified 31 MB ray-traced engine in days.
+            </p>
+          </div>
+        </div>
+        <div id="timeline-grid" class="timeline"></div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Verified RTX 5070 Ti Capture Gallery</h2>
+            <p class="section-sub">
+              Every screenshot below was rendered directly by Forever Platform on native Vulkan — click any frame to inspect full-size.
+            </p>
+          </div>
+          <div id="gallery-filters" class="filter-pills" role="group" aria-label="Filter gallery by game"></div>
+        </div>
+        <div id="gallery-grid" class="gallery-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Forever Platform · Pure-Rust MMO Preservation Hobby Engine</span>
+      <span>Tip: press <strong>F1</strong> anywhere on this page to snap the comparison between Classic and Enhanced + RT.</span>
+    </div>
+  </footer>
+
+  <div
+    id="lightbox"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-title"
+    hidden
+  >
+    <div class="lightbox-panel">
+      <div class="lightbox-bar">
+        <div>
+          <strong id="lightbox-title"></strong>
+          <span id="lightbox-meta" class="bench-scene lightbox-meta"></span>
+        </div>
+        <button id="lightbox-close" class="lightbox-close" type="button">Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="" />
+    </div>
+  </div>
+
+  <div id="hud-toast" class="hud-toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
